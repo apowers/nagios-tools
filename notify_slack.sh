@@ -5,7 +5,7 @@
 # and integration first and then add this notification script in your
 # Nagios configuration.
 #
-# Slack configuration options are taken from the contact.
+# Slack configuration options are taken from the the notification command.
 # define contact {
 #    _slack_username  your.slack.username
 #    _slack_hooks_url https://hooks.slack.com/services/blah/boog/bliggy
@@ -29,9 +29,17 @@
 MESSAGE=$1
 
 #Set the message icon based on Nagios service/host state
-if [ "$NAGIOS_SERVICESTATE" = "CRITICAL" -o "$NAGIOS_HOSTSTATE" = "DOWN" ]; then
+if [ "$NAGIOS_SERVICESTATE" = "CRITICAL" ] ; then
     ICON=":exclamation:"
-elif [ "$NAGIOS_SERVICESTATE" = "OK" -o "$NAGIOS_HOSTSTATE" = "UP" ]; then
+elif [ "$NAGIOS_HOSTSTATE" = "DOWN" ]; then
+    ICON=":exclamation:"
+elif [ "$NAGIOS_SERVICESTATE" = "WARNING" ]; then
+    ICON=":warning:"
+elif [ "$NAGIOS_SERVICESTATE" = "OK" ]; then
+    ICON=":white_check_mark:"
+elif [ "$NAGIOS_SERVICESTATE" = "RECOVERY" ]; then
+    ICON=":white_check_mark:"
+elif [ "$NAGIOS_HOSTSTATE" = "UP" ]; then
     ICON=":white_check_mark:"
 else
     ICON=":warning:"
